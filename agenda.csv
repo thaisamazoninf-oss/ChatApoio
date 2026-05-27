@@ -5,8 +5,6 @@ Segunda,10:00,12:00,Yslanson,Edson
 Segunda,12:00,14:00,Edson,Alvaro
 Segunda,14:00,16:00,Alvaro,Diogo
 Segunda,16:00,18:00,Diogo,
-Segunda,23:00,23:35,Diogo,
-Segunda,23:35,00:00,Teste,
 ,,,,
 Terça,06:00,08:00,Ana Lima,Ana Lima
 Terça,08:00,10:00,Ana Lima,Marlon Castro
@@ -14,8 +12,6 @@ Terça,10:00,12:00,Marlon Castro,Bruno
 Terça,12:00,14:00,Bruno,Ramon
 Terça,14:00,16:00,Ramon,Elian
 Terça,16:00,18:00,Elian,
-Terça,22:00,22:30,Roberto,
-Terça,22:30,23:00,Carlos,
 ,,,,
 Quarta,06:00,08:00,Ana Lima,Ana Lima
 Quarta,08:00,10:00,Ana Lima,Thais
