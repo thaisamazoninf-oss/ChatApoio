@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import json
 import os
 import csv
@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 import webbrowser
 import threading
+from werkzeug.utils import secure_filename
 
 
 # FUNÇÃO PARA OBTER CAMINHO DO ARQUIVO, FUNCIONA TANTO EM DESENVOLVIMENTO QUANTO EM EXECUTÁVEL  
@@ -22,6 +23,8 @@ app = Flask(
     template_folder=caminho_arquivo("templates"),
     static_folder=caminho_arquivo("static")
 )
+
+app.secret_key = "senha_super_secreta"
 
 
 ARQUIVO_JSON = caminho_arquivo("chamados.json")
@@ -223,8 +226,68 @@ def index():
         proximo=proximo,
         apoio_status=apoio.get("status"),
         apoio_nome=apoio.get("nome"),
-        apoios=lista_apoios
+        apoios=lista_apoios,
+        admin=session.get("admin")
     )
+
+# LOGIN ADMIN
+@app.route(
+        "/login-admin",
+        methods=["POST"]
+)
+
+def login_admin():
+
+    senha = request.form.get("senha")
+
+    if senha == "admin123":
+
+        session["admin"] = True
+
+        return jsonify({"success": True})
+    
+    return jsonify({"success": False})
+
+# LOGOUT ADMIN
+@app.route("/logout-admin")
+def logout_admin():
+
+    session.pop("admin", None)
+
+    return jsonify({"success": True})
+
+#UPLOAD ADMIN
+@app.route("/upload-arquivos", 
+           methods=["POST"]
+)
+def upload_arquivos():
+
+    if not session.get("admin"):
+        return jsonify({
+            "success": False
+        })
+
+    imagem = request.files.get("imagem")
+    csv_file = request.files.get("csv")
+
+    if imagem:
+
+        imagem.save( 
+            os.path.join(
+                caminho_arquivo("static"),
+                "calendar.jpeg"
+            )
+        )
+
+
+    if csv_file:
+        csv_file.save(
+            ARQUIVO_AGENDA
+        )
+    
+    return jsonify({
+        "success": True
+    })
 
 # CRIAR CHAMADO
 @app.route("/criar", methods=["POST"])
@@ -369,6 +432,24 @@ def encerrar_apoio():
     salvar_apoio({})
 
     return jsonify({"success": True})
+
+
+@app.route("/dados-painel")
+def dados_painel():
+
+    chamados = ler_chamados()
+
+    atual, proximo = obter_atendimento_atual()
+
+    apoio = ler_apoio()
+
+    return jsonify({
+        "atual": atual,
+        "proximo": proximo,
+        "apoio_status": apoio.get("status"),
+        "apoio_nome": apoio.get("nome"),
+        "chamados": chamados,
+    })
 
 
 def abrir_navegador():
