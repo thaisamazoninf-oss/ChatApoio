@@ -22,6 +22,8 @@
         <div class="painel-atendimento">
 
             <div 
+                id="card-atual"
+
                 class="atendimento-atual
 
                 {% if apoio_status == 'solicitado' %}
@@ -102,7 +104,7 @@
             </div>
 
             
-            <div class="proximo-atendimento">
+            <div id="card-proximo" class="proximo-atendimento">
 
                 <button id="abrir-agenda" class="btn-agenda">
                     📅
@@ -160,7 +162,7 @@
             </form>
 
         </div>
-        <div class="lista-chamados">
+        <div id="lista-chamados" class="lista-chamados">
 
             {% for chamado in chamados %}
 
@@ -373,6 +375,89 @@
         </div>
 
     </div>
+
+    {% if not session.get('admin') %}
+
+    <div class="admin-float">
+        <button id="abrir-admin">
+            ⚙️
+        </button>
+
+        <div id="login-admin-box" class="login-admin-box">
+            <h3>
+                Área Administrativa
+            </h3>
+    
+            <input 
+                type="password"
+                id="senha-admin"
+                placeholder="Senha"
+            >
+    
+            <button id="btn-login-admin">
+                Entrar
+            </button>
+        </div>
+    </div>
+
+    {% endif %}
+
+    {% if session.get('admin') %}
+
+    <div class="admin-logado">
+        <button id="abrir-painel-admin">
+            Admin
+        </button>
+    </div>
+
+    <div id="modal-admin" class="modal-admin">
+
+        <div class="modal-admin-conteudo">
+
+            <span id="fechar-admin">
+                ×
+            </span>
+
+            <h2>
+                Painel Administrativo
+            </h2>
+
+            
+            <form id="form-admin" enctype="multipart/form-data">
+                
+                <label>
+                    Imagem da agenda
+                </label>
+                
+                <input 
+                type="file"
+                id="imagem-agenda"
+                accept="image/*"
+                >
+                
+                <label>
+                    Planilha CSV
+                </label>
+                
+                <input 
+                type="file"
+                id="csv-agenda"
+                accept=".csv"
+                >
+                
+                <button type="submit">
+                    Atualizar arquivos
+                </button>
+
+                <button id="logout-admin">
+                    Sair
+                </button>
+            </form>
+        
+        </div>
+    </div>
+
+    {% endif %}
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
