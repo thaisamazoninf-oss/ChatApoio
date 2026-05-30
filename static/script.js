@@ -1,3 +1,181 @@
+// LOGIN ADMIN
+const btnLoginAdmin =
+    document.getElementById(
+        "btn-login-admin"
+    )
+
+if (btnLoginAdmin) {
+
+    btnLoginAdmin.addEventListener(
+        "click",
+        async () => {
+
+            const senha =
+                document.getElementById(
+                    "senha-admin"
+                ).value
+
+            const formData =
+                new FormData()
+
+            formData.append(
+                "senha",
+                senha
+            )
+
+            const resposta =
+                await fetch(
+                    "/login-admin",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                )
+
+            const dados =
+                await resposta.json()
+
+            if (dados.success) {
+
+                location.reload()
+
+            } else {
+
+                alert(
+                    "Senha incorreta"
+                )
+            }
+        }
+    )
+}
+
+// MODAL ADMIN
+const abrirPainelAdmin =
+    document.getElementById(
+        "abrir-painel-admin"
+    )
+
+const modalAdmin =
+    document.getElementById(
+        "modal-admin"
+    )
+
+const fecharAdmin =
+    document.getElementById(
+        "fechar-admin"
+    )
+
+if (abrirPainelAdmin) {
+
+    abrirPainelAdmin.addEventListener(
+        "click",
+        () => {
+
+            modalAdmin.style.display =
+                "flex"
+        }
+    )
+}
+
+if (fecharAdmin) {
+
+    fecharAdmin.addEventListener(
+        "click",
+        () => {
+
+            modalAdmin.style.display =
+                "none"
+        }
+    )
+}
+
+// LOGOUT ADMIN
+const logoutAdmin =
+    document.getElementById(
+        "logout-admin"
+    )
+
+if (logoutAdmin) {
+
+    logoutAdmin.addEventListener(
+        "click",
+        async () => {
+
+            await fetch(
+                "/logout-admin"
+            )
+
+            location.reload()
+        }
+    )
+}
+
+//UPLOAD ADMIN
+const formAdmin =
+    document.getElementById(
+        "form-admin"
+    )
+
+if (formAdmin) {
+
+    formAdmin.addEventListener(
+        "submit",
+        async (e) => {
+
+            e.preventDefault()
+
+            const dados =
+                new FormData()
+
+            const imagem =
+                document.getElementById(
+                    "imagem-agenda"
+                ).files[0]
+            
+            const csv =
+                document.getElementById(
+                    "csv-agenda"
+                ).files[0]
+
+            if (imagem) {
+
+                dados.append(
+                    "imagem", 
+                    imagem
+                )
+            }
+
+            if (csv) {
+
+                dados.append(
+                    "csv",
+                    csv
+                )
+            }
+
+            const resposta = await fetch(
+                "/upload-arquivos",
+                {
+                    method: "POST",
+                    body: dados
+                }
+            )
+
+            const resultado =
+                await resposta.json()
+
+            if (resultado.success) {
+
+                alert(
+                    "Arquivos atualizados" 
+                )
+
+                location.reload()
+            }
+        }
+    )
+}
+
 //CRIAR CHAMADO
 document
     .getElementById("form")
@@ -253,6 +431,31 @@ if (fecharAgenda) {
         () => {
 
             modalAgenda.style.display = "none"
+        }
+    )
+}
+
+// ABRIR LOGIN ADMIN
+const abrirAdmin =
+    document.getElementById(
+        "abrir-admin"
+    )
+
+const loginAdminBox =
+    document.getElementById(
+        "login-admin-box"
+    )
+
+if (abrirAdmin) {
+
+    abrirAdmin.addEventListener(
+        "click",
+        () => {
+
+            loginAdminBox.classList.toggle(
+                "mostrar-admin"
+            )
+
         }
     )
 }
